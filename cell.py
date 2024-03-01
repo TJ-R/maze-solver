@@ -2,38 +2,56 @@ from graphics import Point, Line
 
 
 class Cell:
-    def __init__(self, window, x1, x2, y1, y2):
+    def __init__(self, window=None):
         self.has_left_wall = True
         self.has_right_wall = True
         self.has_top_wall = True
         self.has_bottom_wall = True
+        self.__x1 = None
+        self.__x2 = None
+        self.__y1 = None
+        self.__y2 = None
+        self.__win = window
+        self.visited = False
+
+    def draw(self, x1, y1, x2, y2):
+        if self.__win is None:
+            return
+
         self.__x1 = x1
         self.__x2 = x2
         self.__y1 = y1
         self.__y2 = y2
-        self.__win = window
 
-    def draw(self):
         top_left_point = Point(self.__x1, self.__y1)
         top_right_point = Point(self.__x2, self.__y1)
         bottom_right_point = Point(self.__x2, self.__y2)
         bottom_left_point = Point(self.__x1, self.__y2)
 
+        left_line = Line(top_left_point, bottom_left_point)
+        right_line = Line(top_right_point, bottom_right_point)
+        top_line = Line(top_left_point, top_right_point)
+        bottom_line = Line(bottom_left_point, bottom_right_point)
+
         if self.has_left_wall:
-            left_line = Line(top_left_point, bottom_left_point)
             self.__win.draw_line(left_line, "black")
+        else:
+            self.__win.draw_line(left_line, "white")
 
         if self.has_right_wall:
-            right_line = Line(top_right_point, bottom_right_point)
             self.__win.draw_line(right_line, "black")
+        else:
+            self.__win.draw_line(right_line, "white")
 
         if self.has_top_wall:
-            top_line = Line(top_left_point, top_right_point)
             self.__win.draw_line(top_line, "black")
+        else:
+            self.__win.draw_line(top_line, "white")
 
         if self.has_bottom_wall:
-            bottom_line = Line(bottom_left_point, bottom_right_point)
             self.__win.draw_line(bottom_line, "black")
+        else:
+            self.__win.draw_line(bottom_line, "white")
 
     def draw_move(self, to_cell, undo=False):
         if self.__win is None:
